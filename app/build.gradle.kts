@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -76,9 +76,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
-    //Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -91,19 +88,20 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // Coroutine Lifecycle Scopes
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     // Coil
     implementation ("io.coil-kt:coil:2.4.0")
     implementation ("com.google.accompanist:accompanist-coil:0.7.0")
 
     //Dagger - Hilt
-    implementation ("com.google.dagger:hilt-android:2.44")
-    kapt ("com.google.dagger:hilt-android-compiler:2.42")
-    implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt ("androidx.hilt:hilt-compiler:1.1.0-alpha01")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    /*implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+    kapt ("androidx.hilt:hilt-compiler:1.1.0-alpha01")*/
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
     implementation("com.android.support:palette-v7:28.0.0")
 }
