@@ -3,6 +3,7 @@ package com.felo.compose.pokedex
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,12 +18,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.felo.compose.pokedex.data.modesl.PokedexListEntry
 import com.felo.compose.pokedex.pokemonlist.PokemonListScreen
+import com.felo.compose.pokedex.pokemonlist.PokemonListViewModel
 import com.felo.compose.pokedex.ui.theme.PokedexTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewMode: PokemonListViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,7 +39,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = "pokemon_list_screen"
                 ){
                     composable(route = "pokemon_list_screen"){
-                        PokemonListScreen(navController = navController)
+                        PokemonListScreen(navController = navController, viewModel = viewMode)
                     }
 
                     composable(

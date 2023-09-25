@@ -1,7 +1,7 @@
 package com.plcoding.jetpackcomposepokedex.data.remote.responses
 
 
-import com.google.gson.annotations.SerializedName
+import com.felo.compose.pokedex.data.remote.response.Result
 
 data class PokemonList(
     val count: Int,
