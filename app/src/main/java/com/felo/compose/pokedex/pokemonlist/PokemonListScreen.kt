@@ -199,7 +199,6 @@ fun PokedexEntry(
             val imageRequest = ImageRequest.Builder(context)
                 .data(entry.imageUrl)
                 .target { result ->
-                    pokemonImage = result
                     viewModel.calcDominantColor(result){
                         dominantColor = it
                     }
@@ -208,12 +207,17 @@ fun PokedexEntry(
 
             imageLoader.enqueue(imageRequest)
 
-            Image(
+            SubcomposeAsyncImage(
                 modifier = Modifier
                     .size(120.dp)
                     .align(CenterHorizontally),
-                painter = rememberDrawablePainter(drawable = pokemonImage),
+                model = entry.imageUrl,
                 contentDescription = null,
+                loading = {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(100.dp)
+                    )
+                },
             )
 
             Text(
