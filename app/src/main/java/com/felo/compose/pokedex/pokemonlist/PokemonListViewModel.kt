@@ -3,6 +3,7 @@ package com.felo.compose.pokedex.pokemonlist
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.capitalize
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PokemonListViewModel @Inject constructor( private val repository: PokemonRepository) : ViewModel()
 {
+    private val TAG = "PokemonListViewModel"
     private var curPage = 0
 
     var pokemonList = mutableStateOf<List<PokedexListEntry>>(listOf())
@@ -38,6 +40,7 @@ class PokemonListViewModel @Inject constructor( private val repository: PokemonR
     fun loadPokemonPaginated()
     {
         viewModelScope.launch {
+            Log.d(TAG, "loadPokemonPaginated: ")
             isLoading.value = true
             val result = repository.getPokemonList(PAGE_SIZE, curPage * PAGE_SIZE)
             when(result)

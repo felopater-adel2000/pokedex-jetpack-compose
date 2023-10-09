@@ -93,7 +93,7 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation ("com.google.accompanist:accompanist-coil:0.10.0")
+    /*implementation ("com.google.accompanist:accompanist-coil:0.10.0")*/
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -104,4 +104,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
     implementation("com.android.support:palette-v7:28.0.0")
+
+    // Drawable Painter
+    implementation ("com.google.accompanist:accompanist-drawablepainter:0.28.0")
 }

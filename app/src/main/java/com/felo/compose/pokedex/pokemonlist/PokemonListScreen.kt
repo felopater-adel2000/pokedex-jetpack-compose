@@ -1,6 +1,8 @@
 package com.felo.compose.pokedex.pokemonlist
 
+import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,12 +34,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
+import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.felo.compose.pokedex.R
 import com.felo.compose.pokedex.data.modesl.PokedexListEntry
 import com.felo.compose.pokedex.ui.theme.RobotoCondensed
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 private const val TAG = "PokemonListScreen"
 @Composable
@@ -138,7 +145,7 @@ fun PokemonList(
             pokemonList.size / 2 + 1
         }
         items(itemCount) {
-            if(it >= itemCount - 1 && !endReached) {
+            if(it >= itemCount - 1 && !endReached && !isLoading) {
                 viewModel.loadPokemonPaginated()
             }
             PokedexRow(rowIndex = it, entries = pokemonList, navController = navController, viewModel = viewModel)
@@ -185,23 +192,28 @@ fun PokedexEntry(
             },
     ){
         Column {
+            val context = LocalContext.current
+            var pokemonImage by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.ic_international_pok_mon_logo)) }
 
-            val imageRequest = ImageRequest.Builder(LocalContext.current)
+            val imageLoader = ImageLoader.Builder(context).build()
+            val imageRequest = ImageRequest.Builder(context)
                 .data(entry.imageUrl)
-                .target {
-                    Log.d(TAG, "PokedexEntry: call target")
-                    viewModel.calcDominantColor(it){color ->
-                        dominantColor = color
+                .target { result ->
+                    pokemonImage = result
+                    viewModel.calcDominantColor(result){
+                        dominantColor = it
                     }
                 }
                 .build()
 
-            AsyncImage(
+            imageLoader.enqueue(imageRequest)
+
+            Image(
                 modifier = Modifier
                     .size(120.dp)
                     .align(CenterHorizontally),
-                model = entry.imageUrl,
-                contentDescription = null
+                painter = rememberDrawablePainter(drawable = pokemonImage),
+                contentDescription = null,
             )
 
             Text(

@@ -35,7 +35,7 @@ private val LightColorPalette = lightColorScheme(
 @Composable
 fun PokedexTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
-        DarkColorPalette
+        /*DarkColorPalette*/ LightColorPalette
     } else {
         LightColorPalette
     }
