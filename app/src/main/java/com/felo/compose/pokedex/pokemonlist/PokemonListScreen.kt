@@ -2,6 +2,7 @@ package com.felo.compose.pokedex.pokemonlist
 
 import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
@@ -44,6 +46,7 @@ import coil.request.ImageRequest
 import com.felo.compose.pokedex.R
 import com.felo.compose.pokedex.data.modesl.PokedexListEntry
 import com.felo.compose.pokedex.ui.theme.RobotoCondensed
+import com.felo.compose.pokedex.utils.hideSoftKeyboard
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 private const val TAG = "PokemonListScreen"
@@ -70,7 +73,9 @@ fun PokemonListScreen(navController: NavController, viewModel: PokemonListViewMo
                     .fillMaxWidth()
                     .padding(16.dp),
                 hint = "search..."
-            ){}
+            ){
+                viewModel.searchPokemonList(it)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -102,7 +107,7 @@ fun SearchBar(
                 .background(Color.White, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .onFocusChanged {
-                    isHintDisplayed = (!it.isFocused)
+                    isHintDisplayed = (!it.isFocused) && (text.isNotEmpty())
                 },
             value = text,
             onValueChange = {
@@ -135,8 +140,13 @@ fun PokemonList(
     val endReached by remember { viewModel.endReached }
     val loadError by remember { viewModel.loadError }
     val isLoading by remember { viewModel.isLoading }
+    val isSearching by remember { viewModel.isSearching }
 
+    val activity = LocalContext.current as ComponentActivity
     LazyColumn(
+        modifier = Modifier.clickable {
+            activity.hideSoftKeyboard()
+        },
         contentPadding = PaddingValues(16.dp)
     ){
         val itemCount = if(pokemonList.size % 2 == 0) {
@@ -145,7 +155,7 @@ fun PokemonList(
             pokemonList.size / 2 + 1
         }
         items(itemCount) {
-            if(it >= itemCount - 1 && !endReached && !isLoading) {
+            if(it >= itemCount - 1 && !endReached && !isLoading && !isSearching) {
                 viewModel.loadPokemonPaginated()
             }
             PokedexRow(rowIndex = it, entries = pokemonList, navController = navController, viewModel = viewModel)
@@ -193,7 +203,7 @@ fun PokedexEntry(
     ){
         Column {
             val context = LocalContext.current
-            var pokemonImage by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.ic_international_pok_mon_logo)) }
+//            var pokemonImage by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.ic_international_pok_mon_logo)) }
 
             val imageLoader = ImageLoader.Builder(context).build()
             val imageRequest = ImageRequest.Builder(context)
@@ -215,7 +225,8 @@ fun PokedexEntry(
                 contentDescription = null,
                 loading = {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(100.dp)
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.scale(0.5f)
                     )
                 },
             )
