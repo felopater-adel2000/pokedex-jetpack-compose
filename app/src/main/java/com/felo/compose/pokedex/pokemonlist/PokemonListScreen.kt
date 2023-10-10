@@ -107,7 +107,7 @@ fun SearchBar(
                 .background(Color.White, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
                 .onFocusChanged {
-                    isHintDisplayed = (!it.isFocused) && (text.isNotEmpty())
+                    isHintDisplayed = (!it.isFocused) || (text.isNotEmpty())
                 },
             value = text,
             onValueChange = {
@@ -205,17 +205,21 @@ fun PokedexEntry(
             val context = LocalContext.current
 //            var pokemonImage by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.ic_international_pok_mon_logo)) }
 
+
+            Log.d(TAG, "PokedexEntry: entry.dominantColor == null")
             val imageLoader = ImageLoader.Builder(context).build()
             val imageRequest = ImageRequest.Builder(context)
                 .data(entry.imageUrl)
                 .target { result ->
-                    viewModel.calcDominantColor(result){
+                    viewModel.calcDominantColor(result) {
                         dominantColor = it
+                        entry.dominantColor = it
                     }
                 }
                 .build()
 
             imageLoader.enqueue(imageRequest)
+
 
             SubcomposeAsyncImage(
                 modifier = Modifier

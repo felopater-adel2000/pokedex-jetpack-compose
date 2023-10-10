@@ -4,30 +4,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.felo.compose.pokedex.data.modesl.PokedexListEntry
+import com.felo.compose.pokedex.pokemondetails.PokemonDetailsScreen
+import com.felo.compose.pokedex.pokemondetails.PokemonDetailsViewModel
 import com.felo.compose.pokedex.pokemonlist.PokemonListScreen
 import com.felo.compose.pokedex.pokemonlist.PokemonListViewModel
 import com.felo.compose.pokedex.ui.theme.PokedexTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewMode: PokemonListViewModel by viewModels()
+    private val pokemonListViewModel: PokemonListViewModel by viewModels()
+    private val pokemonDetailsViewModel: PokemonDetailsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = "pokemon_list_screen"
                 ){
                     composable(route = "pokemon_list_screen"){
-                        PokemonListScreen(navController = navController, viewModel = viewMode)
+                        PokemonListScreen(navController = navController, viewModel = pokemonListViewModel)
                     }
 
                     composable(
@@ -58,6 +54,12 @@ class MainActivity : ComponentActivity() {
                         val pokemonName: String = remember{
                             it.arguments?.getString("pokemonName") ?: ""
                         }
+                        PokemonDetailsScreen(
+                            domaintColor = dominantColor,
+                            pokemonName = pokemonName.lowercase(Locale.ROOT),
+                            navController = navController,
+                            viewModel = pokemonDetailsViewModel
+                        )
                     }
                 }
             }
