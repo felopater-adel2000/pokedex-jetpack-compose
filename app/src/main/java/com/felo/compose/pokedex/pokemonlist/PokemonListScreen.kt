@@ -1,7 +1,6 @@
 package com.felo.compose.pokedex.pokemonlist
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -156,7 +155,9 @@ fun PokemonList(
         }
         items(itemCount) {
             if(it >= itemCount - 1 && !endReached && !isLoading && !isSearching) {
-                viewModel.loadPokemonPaginated()
+                LaunchedEffect(key1 = true) {
+                    viewModel.loadPokemonPaginated()
+                }
             }
             PokedexRow(rowIndex = it, entries = pokemonList, navController = navController, viewModel = viewModel)
         }
@@ -203,10 +204,8 @@ fun PokedexEntry(
     ){
         Column {
             val context = LocalContext.current
-//            var pokemonImage by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.ic_international_pok_mon_logo)) }
 
 
-            Log.d(TAG, "PokedexEntry: entry.dominantColor == null")
             val imageLoader = ImageLoader.Builder(context).build()
             val imageRequest = ImageRequest.Builder(context)
                 .data(entry.imageUrl)
