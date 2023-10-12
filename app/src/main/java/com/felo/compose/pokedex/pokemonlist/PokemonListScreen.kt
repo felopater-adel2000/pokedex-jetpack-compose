@@ -46,7 +46,7 @@ import com.felo.compose.pokedex.R
 import com.felo.compose.pokedex.data.modesl.PokedexListEntry
 import com.felo.compose.pokedex.ui.theme.RobotoCondensed
 import com.felo.compose.pokedex.utils.hideSoftKeyboard
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
+
 
 private const val TAG = "PokemonListScreen"
 @Composable
